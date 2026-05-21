@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 const MAX = 100
 
@@ -23,8 +26,9 @@ func inputString(pesan string) string {
 
 func inputTanggal() string {
 	var tgl string
-	fmt.Print("Masukkan tanggal update (dd-mm-yyyy): ")
-	fmt.Scan(&tgl)
+
+	tgl = time.Now().Format("02-01-2006 15:04:55")
+
 	return tgl
 }
 
