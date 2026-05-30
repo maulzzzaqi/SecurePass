@@ -5,7 +5,15 @@ import (
 	"time"
 )
 
-const MAX = 100
+const akunMax = 100
+const userMax = 10
+
+type user struct {
+	username string
+	password string
+	kumpulanAkun [akunMax]Akun
+	jumlahAkun int
+}
 
 type Akun struct {
 	layanan    string
