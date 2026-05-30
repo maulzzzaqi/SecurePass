@@ -92,6 +92,71 @@ func cekKekuatanPassword(pass string) string {
 	return "KUAT"
 }
 
+func tambahUser() {
+	var i int
+	var newUsername string
+	var isDuplicate bool
+
+	isDuplicate = false
+
+	if totalUser < userMax {
+		fmt.Println("\n=== TAMBAH USER ===")
+
+		newUsername = inputString("Username      :")
+
+		for i = 0; i < totalUser; i++ {
+			if dataUser[i].username == newUsername {
+				isDuplicate = true
+			}
+		}
+
+		if isDuplicate {
+			fmt.Println("Gagal! Username sudah digunakan. Silakan coba yang lain.")
+		} else {
+			dataUser[totalUser].username = newUsername
+			dataUser[totalUser].password = inputString("Password      :")
+
+			totalUser++
+
+			fmt.Println("User berhasil ditambahkan!")
+		}
+	} else {
+		fmt.Println("Data penuh! Tidak bisa menambah user.")
+	}
+}
+
+func loginUser() {
+	var inputUsername, inputPassword string
+	var i int
+	var isFound bool
+
+	isFound = false
+
+	if totalUser == 0 {
+		fmt.Println("\n=== LOGIN USER ===")
+		fmt.Println("Error! Tidak ada User yang terdaftar!")
+		fmt.Println("Silahkan lakukan Register terlebih dahulu!")
+		tambahUser()
+	} else {
+		fmt.Println("\n=== LOGIN USER ===")
+		inputUsername = inputString("Username    :")
+		inputPassword = inputString("Password    :")
+
+		for i = 0; i < totalUser; i++ {
+			if dataUser[i].username == inputUsername && dataUser[i].password == inputPassword {
+				currentUserIndex = i
+				isFound = true
+			}
+		}
+
+		if isFound {
+			fmt.Println("Login berhasil!")
+		} else {
+			fmt.Println("Login gagal! Username atau password salah.")
+		}
+	}
+}
+
 func tambahAkun() {
 	if n < MAX {
 		fmt.Println("\n=== TAMBAH AKUN ===")
