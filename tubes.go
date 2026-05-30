@@ -413,6 +413,7 @@ func statistik() {
 
 func menuUtama() {
 	fmt.Println("\n===== SECUREPASS MENU =====")
+	fmt.Printf("===== Selamat Datang, %s! ====\n", dataUser[currentUserIndex].username)
 	fmt.Println("1. Tambah Akun")
 	fmt.Println("2. Tampilkan Semua Akun")
 	fmt.Println("3. Ubah Akun")
@@ -420,36 +421,69 @@ func menuUtama() {
 	fmt.Println("5. Cari Akun")
 	fmt.Println("6. Urutkan Data")
 	fmt.Println("7. Statistik")
+	fmt.Println("8. Logout")
 	fmt.Println("0. Keluar")
 	fmt.Print("Pilih menu: ")
 }
 
+func menuUser() {
+	fmt.Println("\n===== SELAMAT DATANG DI SECUREPASS =====")
+	fmt.Println("1. Register User Baru")
+	fmt.Println("2. Login")
+	fmt.Println("0. Keluar")
+}
+
 func main() {
-	var pilih int
-	pilih = -1
+	var pilihMenuUtama, pilihMenuUser int
 
-	for pilih != 0 {
-		menuUtama()
-		fmt.Scan(&pilih)
+	pilihMenuUser = -1
 
-		if pilih == 1 {
-			tambahAkun()
-		} else if pilih == 2 {
-			tampilkanAkun()
-		} else if pilih == 3 {
-			ubahAkun()
-		} else if pilih == 4 {
-			hapusAkun()
-		} else if pilih == 5 {
-			menuCari()
-		} else if pilih == 6 {
-			menuSort()
-		} else if pilih == 7 {
-			statistik()
-		} else if pilih == 0 {
-			fmt.Println("Terima kasih sudah menggunakan SecurePass.")
+	for pilihMenuUser != 0 {
+		if currentUserIndex == -1 {
+			menuUser()
+			fmt.Scan(&pilihMenuUser)
+
+			if pilihMenuUser == 1 {
+				tambahUser()
+			} else if pilihMenuUser == 2 {
+				loginUser()
+			} else if pilihMenuUser == 0 {
+				fmt.Println("Terima kasih sudah menggunakan SecurePass.")
+				pilihMenuUser = 0
+			} else {
+				fmt.Println("Menu tidak valid!")
+			}
 		} else {
-			fmt.Println("Menu tidak valid!")
+			pilihMenuUtama = -1
+
+			for pilihMenuUtama != 0 && currentUserIndex != -1 {
+				menuUtama()
+				fmt.Scan(&pilihMenuUtama)
+
+				if pilihMenuUtama == 1 {
+					tambahAkun()
+				} else if pilihMenuUtama == 2 {
+					tampilkanAkun()
+				} else if pilihMenuUtama == 3 {
+					ubahAkun()
+				} else if pilihMenuUtama == 4 {
+					hapusAkun()
+				} else if pilihMenuUtama == 5 {
+					menuCari()
+				} else if pilihMenuUtama == 6 {
+					menuSort()
+				} else if pilihMenuUtama == 7 {
+					statistik()
+				} else if pilihMenuUtama == 8 {
+					fmt.Println("Logout berhasil!")
+					currentUserIndex = -1
+				} else if pilihMenuUtama == 0 {
+					fmt.Println("Terima kasih sudah menggunakan SecurePass.")
+					pilihMenuUser = 0
+				} else {
+					fmt.Println("Menu tidak valid!")
+				}	
+			}
 		}
 	}
 }
