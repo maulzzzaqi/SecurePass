@@ -91,20 +91,20 @@ func cekKekuatanPassword(pass string) string {
 	return "KUAT"
 }
 
-func tambahUser() {
+func tambahUser(a *tabUsers, n *int) {
 	var i int
 	var newUsername string
 	var isDuplicate bool
 
 	isDuplicate = false
 
-	if totalUser < userMax {
+	if *n < userMax {
 		fmt.Println("\n=== TAMBAH USER ===")
 
 		newUsername = inputString("Username      :")
 
-		for i = 0; i < totalUser; i++ {
-			if dataUser[i].username == newUsername {
+		for i = 0; i < *n; i++ {
+			if a[i].username == newUsername {
 				isDuplicate = true
 			}
 		}
@@ -112,10 +112,10 @@ func tambahUser() {
 		if isDuplicate {
 			fmt.Println("Gagal! Username sudah digunakan. Silakan coba yang lain.")
 		} else {
-			dataUser[totalUser].username = newUsername
-			dataUser[totalUser].password = inputString("Password      :")
+			a[*n].username = newUsername
+			a[*n].password = inputString("Password      :")
 
-			totalUser++
+			*n++
 
 			fmt.Println("User berhasil ditambahkan!")
 		}
@@ -124,26 +124,26 @@ func tambahUser() {
 	}
 }
 
-func loginUser() {
+func loginUser(a *tabUsers, n *int, userIndex *int) {
 	var inputUsername, inputPassword string
 	var i int
 	var isFound bool
 
 	isFound = false
 
-	if totalUser == 0 {
+	if *n == 0 {
 		fmt.Println("\n=== LOGIN USER ===")
 		fmt.Println("Error! Tidak ada User yang terdaftar!")
 		fmt.Println("Silahkan lakukan Register terlebih dahulu!")
-		tambahUser()
+		tambahUser(a, n)
 	} else {
 		fmt.Println("\n=== LOGIN USER ===")
 		inputUsername = inputString("Username    :")
 		inputPassword = inputString("Password    :")
 
-		for i = 0; i < totalUser; i++ {
-			if dataUser[i].username == inputUsername && dataUser[i].password == inputPassword {
-				currentUserIndex = i
+		for i = 0; i < *n; i++ {
+			if a[i].username == inputUsername && a[i].password == inputPassword {
+				*userIndex = i
 				isFound = true
 			}
 		}
@@ -156,27 +156,29 @@ func loginUser() {
 	}
 }
 
-func tambahAkun() {
-	var jumlahAkun int = dataUser[currentUserIndex].jumlahAkun
+func tambahAkun(a *tabUsers, userIndex int) {
+	var jumlahAkun int 
+	
+	jumlahAkun = a[userIndex].jumlahAkun
 
 	if jumlahAkun < akunMax {
 		fmt.Println("\n=== TAMBAH AKUN ===")
 
-		dataUser[currentUserIndex].kumpulanAkun[jumlahAkun].layanan = inputString("Nama Layanan      : ")
-		dataUser[currentUserIndex].kumpulanAkun[jumlahAkun].email = inputString("Email/Username    : ")
-		dataUser[currentUserIndex].kumpulanAkun[jumlahAkun].password = inputString("Password          : ")
-		dataUser[currentUserIndex].kumpulanAkun[jumlahAkun].lastUpdate = inputTanggal()
+		a[userIndex].kumpulanAkun[jumlahAkun].layanan = inputString("Nama Layanan      : ")
+		a[userIndex].kumpulanAkun[jumlahAkun].email = inputString("Email/Username    : ")
+		a[userIndex].kumpulanAkun[jumlahAkun].password = inputString("Password          : ")
+		a[userIndex].kumpulanAkun[jumlahAkun].lastUpdate = inputTanggal()
 
-		dataUser[currentUserIndex].jumlahAkun++
+		a[userIndex].jumlahAkun++
 		fmt.Println("Data berhasil ditambahkan!")
 	} else {
 		fmt.Println("Data penuh! Tidak bisa menambah akun.")
 	}
 }
 
-func tampilkanAkun() {
+func tampilkanAkun(a tabUsers, userIndex int) {
 	var i int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== DAFTAR AKUN ===")
 
 	if n == 0 {
@@ -185,19 +187,19 @@ func tampilkanAkun() {
 		for i = 0; i < n; i++ {
 			fmt.Println("----------------------------")
 			fmt.Println("No          :", i+1)
-			fmt.Println("Layanan     :", dataUser[currentUserIndex].kumpulanAkun[i].layanan)
-			fmt.Println("Email       :", dataUser[currentUserIndex].kumpulanAkun[i].email)
-			fmt.Println("Last Update :", dataUser[currentUserIndex].kumpulanAkun[i].lastUpdate)
+			fmt.Println("Layanan     :", a[userIndex].kumpulanAkun[i].layanan)
+			fmt.Println("Email       :", a[userIndex].kumpulanAkun[i].email)
+			fmt.Println("Last Update :", a[userIndex].kumpulanAkun[i].lastUpdate)
 		}
 		fmt.Println("----------------------------")
 	}
 }
 
-func ubahAkun() {
+func ubahAkun(a *tabUsers, userIndex int) {
 	var idx, i int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== UBAH AKUN ===")
-	tampilkanAkun()
+	tampilkanAkun(*a, userIndex)
 
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa diubah.")
@@ -209,15 +211,15 @@ func ubahAkun() {
 			i = idx - 1
 
 			fmt.Println("\nData lama:")
-			fmt.Println("Layanan :", dataUser[currentUserIndex].kumpulanAkun[i].layanan)
-			fmt.Println("Email   :", dataUser[currentUserIndex].kumpulanAkun[i].email)
-			fmt.Println("Pass    :", dataUser[currentUserIndex].kumpulanAkun[i].password)
-			fmt.Println("Update  :", dataUser[currentUserIndex].kumpulanAkun[i].lastUpdate)
+			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[i].layanan)
+			fmt.Println("Email   :", a[userIndex].kumpulanAkun[i].email)
+			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[i].password)
+			fmt.Println("Update  :", a[userIndex].kumpulanAkun[i].lastUpdate)
 
-			dataUser[currentUserIndex].kumpulanAkun[i].layanan = inputString("Layanan baru   : ")
-			dataUser[currentUserIndex].kumpulanAkun[i].email = inputString("Email baru     : ")
-			dataUser[currentUserIndex].kumpulanAkun[i].password = inputString("Password baru  : ")
-			dataUser[currentUserIndex].kumpulanAkun[i].lastUpdate = inputTanggal()
+			a[userIndex].kumpulanAkun[i].layanan = inputString("Layanan baru   : ")
+			a[userIndex].kumpulanAkun[i].email = inputString("Email baru     : ")
+			a[userIndex].kumpulanAkun[i].password = inputString("Password baru  : ")
+			a[userIndex].kumpulanAkun[i].lastUpdate = inputTanggal()
 
 			fmt.Println("Data berhasil diubah!")
 		} else {
@@ -226,11 +228,11 @@ func ubahAkun() {
 	}
 }
 
-func hapusAkun() {
+func hapusAkun(a *tabUsers, userIndex int) {
 	var idx, i, pos int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== HAPUS AKUN ===")
-	tampilkanAkun()
+	tampilkanAkun(*a, userIndex)
 
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa dihapus.")
@@ -242,10 +244,10 @@ func hapusAkun() {
 			pos = idx - 1
 
 			for i = pos; i < n-1; i++ {
-				dataUser[currentUserIndex].kumpulanAkun[i] = dataUser[currentUserIndex].kumpulanAkun[i+1]
+				a[userIndex].kumpulanAkun[i] = a[userIndex].kumpulanAkun[i+1]
 			}
 
-			dataUser[currentUserIndex].jumlahAkun--
+			a[userIndex].jumlahAkun--
 			fmt.Println("Data berhasil dihapus!")
 		} else {
 			fmt.Println("Nomor tidak valid!")
@@ -255,13 +257,13 @@ func hapusAkun() {
 
 // searching 
 // Sequential Search (layanan)
-func sequentialSearch(layanan string) int {
+func sequentialSearch(a tabUsers, userIndex int, layanan string) int {
 	var pos, i int
 	pos = -1
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 
 	for i = 0; i < n; i++ {
-		if dataUser[currentUserIndex].kumpulanAkun[i].layanan == layanan {
+		if a[userIndex].kumpulanAkun[i].layanan == layanan {
 			pos = i
 		}
 	}
@@ -269,9 +271,9 @@ func sequentialSearch(layanan string) int {
 }
 
 // Binary Search (data harus sudah diurutkan alfabet) (username atau email)
-func binarySearch(email string) int {
+func binarySearch(a tabUsers, userIndex int, email string) int {
 	var kiri, kanan, pos, tengah int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 
 	kiri = 0
 	kanan = n - 1
@@ -280,9 +282,9 @@ func binarySearch(email string) int {
 	for kiri <= kanan && pos == -1 {
 		tengah = (kiri + kanan) / 2
 
-		if dataUser[currentUserIndex].kumpulanAkun[tengah].email == email {
+		if a[userIndex].kumpulanAkun[tengah].email == email {
 			pos = tengah
-		} else if dataUser[currentUserIndex].kumpulanAkun[tengah].email < email {
+		} else if a[userIndex].kumpulanAkun[tengah].email < email {
 			kiri = tengah + 1
 		} else {
 			kanan = tengah - 1
@@ -291,7 +293,7 @@ func binarySearch(email string) int {
 	return pos
 }
 
-func menuCari() {
+func menuCari(a tabUsers, userIndex int) {
 	var pilih, pos int
 	var layanan string
 
@@ -304,26 +306,26 @@ func menuCari() {
 	layanan = inputString("Masukkan username/email yang dicari: ")
 
 	if pilih == 1 {
-		pos = sequentialSearch(layanan)
+		pos = sequentialSearch(a, userIndex, layanan)
 		if pos != -1 {
 			fmt.Println("Data ditemukan!")
-			fmt.Println("Layanan :", dataUser[currentUserIndex].kumpulanAkun[pos].layanan)
-			fmt.Println("Email   :", dataUser[currentUserIndex].kumpulanAkun[pos].email)
-			fmt.Println("Pass    :", dataUser[currentUserIndex].kumpulanAkun[pos].password)
-			fmt.Println("Update  :", dataUser[currentUserIndex].kumpulanAkun[pos].lastUpdate)
-			fmt.Println("Kekuatan:", cekKekuatanPassword(dataUser[currentUserIndex].kumpulanAkun[pos].password))
+			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
+			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
+			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
+			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
+			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
 		} else {
 			fmt.Println("Data tidak ditemukan.")
 		}
 	} else if pilih == 2 {
-		pos = binarySearch(layanan)
+		pos = binarySearch(a, userIndex, layanan)
 		if pos != -1 {
 			fmt.Println("Data ditemukan!")
-			fmt.Println("Layanan :", dataUser[currentUserIndex].kumpulanAkun[pos].layanan)
-			fmt.Println("Email   :", dataUser[currentUserIndex].kumpulanAkun[pos].email)
-			fmt.Println("Pass    :", dataUser[currentUserIndex].kumpulanAkun[pos].password)
-			fmt.Println("Update  :", dataUser[currentUserIndex].kumpulanAkun[pos].lastUpdate)
-			fmt.Println("Kekuatan:", cekKekuatanPassword(dataUser[currentUserIndex].kumpulanAkun[pos].password))
+			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
+			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
+			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
+			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
+			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
 		} else {
 			fmt.Println("Data tidak ditemukan.")
 		}
@@ -334,49 +336,49 @@ func menuCari() {
 
 //SORTING 
 // Selection Sort berdasarkan nama layanan alfabet
-func selectionSortNama() {
+func selectionSortNama(a *tabUsers, userIndex int) {
 	var i, j, min int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 	var temp Akun
 
 	for i = 0; i < n-1; i++ {
 		min = i
 		for j = i + 1; j < n; j++ {
-			if dataUser[currentUserIndex].kumpulanAkun[j].layanan < dataUser[currentUserIndex].kumpulanAkun[min].layanan {
+			if a[userIndex].kumpulanAkun[j].layanan < a[userIndex].kumpulanAkun[min].layanan {
 				min = j
 			}
 		}
 
-		temp = dataUser[currentUserIndex].kumpulanAkun[i]
-		dataUser[currentUserIndex].kumpulanAkun[i] = dataUser[currentUserIndex].kumpulanAkun[min]
-		dataUser[currentUserIndex].kumpulanAkun[min] = temp
+		temp = a[userIndex].kumpulanAkun[i]
+		a[userIndex].kumpulanAkun[i] = a[userIndex].kumpulanAkun[min]
+		a[userIndex].kumpulanAkun[min] = temp
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
 }
 
 // Insertion Sort berdasarkan tanggal update
-func insertionSortTanggal() {
+func insertionSortTanggal(a *tabUsers, userIndex int) {
 	var i, j int
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 	var key Akun
 
 	for i = 1; i < n; i++ {
-		key = dataUser[currentUserIndex].kumpulanAkun[i]
+		key = a[userIndex].kumpulanAkun[i]
 		j = i - 1
 
-		for j >= 0 && dataUser[currentUserIndex].kumpulanAkun[j].lastUpdate > key.lastUpdate {
-			dataUser[currentUserIndex].kumpulanAkun[j+1] = dataUser[currentUserIndex].kumpulanAkun[j]
+		for j >= 0 && a[userIndex].kumpulanAkun[j].lastUpdate > key.lastUpdate {
+			a[userIndex].kumpulanAkun[j+1] = a[userIndex].kumpulanAkun[j]
 			j--
 		}
 
-		dataUser[currentUserIndex].kumpulanAkun[j+1] = key
+		a[userIndex].kumpulanAkun[j+1] = key
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
 }
 
-func menuSort() {
+func menuSort(a *tabUsers, userIndex int) {
 	var pilih int
 
 	fmt.Println("\n=== MENU SORTING ===")
@@ -386,18 +388,18 @@ func menuSort() {
 	fmt.Scan(&pilih)
 
 	if pilih == 1 {
-		selectionSortNama()
+		selectionSortNama(a, userIndex)
 	} else if pilih == 2 {
-		insertionSortTanggal()
+		insertionSortTanggal(a, userIndex)
 	} else {
 		fmt.Println("Pilihan tidak valid!")
 	}
 }
 
-func statistik() {
+func statistik(a tabUsers, userIndex int) {
 	var lemah, kuat, sedang, i int
 	var k string
-	var n int = dataUser[currentUserIndex].jumlahAkun
+	var n int = a[userIndex].jumlahAkun
 
 	fmt.Println("\n=== STATISTIK SECUREPASS ===")
 	fmt.Println("Total akun tersimpan:", n)
@@ -407,7 +409,7 @@ func statistik() {
 	kuat = 0
 
 	for i = 0; i < n; i++ {
-		k = cekKekuatanPassword(dataUser[currentUserIndex].kumpulanAkun[i].password)
+		k = cekKekuatanPassword(a[userIndex].kumpulanAkun[i].password)
 
 		if k == "LEMAH" {
 			lemah++
@@ -423,9 +425,9 @@ func statistik() {
 	fmt.Println("Password Kuat  :", kuat)
 }
 
-func menuUtama() {
+func menuUtama(username string) {
 	fmt.Println("\n===== SECUREPASS MENU =====")
-	fmt.Printf("===== Selamat Datang, %s! ====\n", dataUser[currentUserIndex].username)
+	fmt.Printf("===== Selamat Datang, %s! ====\n", username)
 	fmt.Println("1. Tambah Akun")
 	fmt.Println("2. Tampilkan Semua Akun")
 	fmt.Println("3. Ubah Akun")
@@ -443,6 +445,7 @@ func menuUser() {
 	fmt.Println("1. Register User Baru")
 	fmt.Println("2. Login")
 	fmt.Println("0. Keluar")
+	fmt.Print("Pilih: ")
 }
 
 func main() {
@@ -461,9 +464,9 @@ func main() {
 			fmt.Scan(&pilihMenuUser)
 
 			if pilihMenuUser == 1 {
-				tambahUser()
+				tambahUser(&arrUser, &totalUser)
 			} else if pilihMenuUser == 2 {
-				loginUser()
+				loginUser(&arrUser, &totalUser, &currentUserIndex)
 			} else if pilihMenuUser == 0 {
 				fmt.Println("Terima kasih sudah menggunakan SecurePass.")
 				pilihMenuUser = 0
@@ -474,23 +477,24 @@ func main() {
 			pilihMenuUtama = -1
 
 			for pilihMenuUtama != 0 && currentUserIndex != -1 {
-				menuUtama()
+				menuUtama(arrUser[currentUserIndex].username)
+				fmt.Print("Pilih: ")
 				fmt.Scan(&pilihMenuUtama)
 
 				if pilihMenuUtama == 1 {
-					tambahAkun()
+					tambahAkun(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 2 {
-					tampilkanAkun()
+					tampilkanAkun(arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 3 {
-					ubahAkun()
+					ubahAkun(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 4 {
-					hapusAkun()
+					hapusAkun(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 5 {
-					menuCari()
+					menuCari(arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 6 {
-					menuSort()
+					menuSort(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 7 {
-					statistik()
+					statistik(arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 8 {
 					fmt.Println("Logout berhasil!")
 					currentUserIndex = -1
@@ -499,7 +503,7 @@ func main() {
 					pilihMenuUser = 0
 				} else {
 					fmt.Println("Menu tidak valid!")
-				}	
+				}
 			}
 		}
 	}
