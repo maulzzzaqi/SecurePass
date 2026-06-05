@@ -1,12 +1,3 @@
-/* TODO:
-- Ubah tampilan semua akun (
-	> hilangin detail password, last update, dan kekuatan
-)
-
-- Ubah tampilan detail akun (
-	> tambah detail kekuatan
-)
-*/
 package main
 
 import (
