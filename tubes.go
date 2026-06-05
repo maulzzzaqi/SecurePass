@@ -22,11 +22,7 @@ type Akun struct {
 	lastUpdate string
 }
 
-var dataAkun [akunMax]Akun
-var dataUser [10]user
-var currentUserIndex int = -1
-var totalUser int = 0
-// var n int = dataUser[currentUserIndex].jumlahAkun
+type tabUsers [userMax]user
 
 func inputString(pesan string) string {
 	var x string
@@ -451,8 +447,13 @@ func menuUser() {
 
 func main() {
 	var pilihMenuUtama, pilihMenuUser int
+	var arrUser tabUsers
+	var currentUserIndex int
+	var totalUser int
 
+	currentUserIndex = -1
 	pilihMenuUser = -1
+	totalUser = 0
 
 	for pilihMenuUser != 0 {
 		if currentUserIndex == -1 {
