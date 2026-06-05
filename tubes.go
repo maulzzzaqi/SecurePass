@@ -258,7 +258,7 @@ func hapusAkun() {
 }
 
 // searching 
-// Sequential Search
+// Sequential Search (layanan)
 func sequentialSearch(layanan string) int {
 	var pos, i int
 	pos = -1
@@ -272,8 +272,8 @@ func sequentialSearch(layanan string) int {
 	return pos
 }
 
-// Binary Search (data harus sudah diurutkan alfabet)
-func binarySearch(layanan string) int {
+// Binary Search (data harus sudah diurutkan alfabet) (username atau email)
+func binarySearch(email string) int {
 	var kiri, kanan, pos, tengah int
 	var n int = dataUser[currentUserIndex].jumlahAkun
 
@@ -284,9 +284,9 @@ func binarySearch(layanan string) int {
 	for kiri <= kanan && pos == -1 {
 		tengah = (kiri + kanan) / 2
 
-		if dataUser[currentUserIndex].kumpulanAkun[tengah].layanan == layanan {
+		if dataUser[currentUserIndex].kumpulanAkun[tengah].email == email {
 			pos = tengah
-		} else if dataUser[currentUserIndex].kumpulanAkun[tengah].layanan < layanan {
+		} else if dataUser[currentUserIndex].kumpulanAkun[tengah].email < email {
 			kiri = tengah + 1
 		} else {
 			kanan = tengah - 1
@@ -300,12 +300,12 @@ func menuCari() {
 	var layanan string
 
 	fmt.Println("\n=== MENU PENCARIAN ===")
-	fmt.Println("1. Sequential Search")
-	fmt.Println("2. Binary Search (harus sudah sorting alfabet)")
+	fmt.Println("1. Cari berdasarkan layanan")
+	fmt.Println("2. Cari berdasarkan email")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
-	layanan = inputString("Masukkan nama layanan yang dicari: ")
+	layanan = inputString("Masukkan username/email yang dicari: ")
 
 	if pilih == 1 {
 		pos = sequentialSearch(layanan)
