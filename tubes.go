@@ -201,6 +201,7 @@ func ubahAkun() {
 	var idx, i int
 	var n int = dataUser[currentUserIndex].jumlahAkun
 	fmt.Println("\n=== UBAH AKUN ===")
+	tampilkanAkun()
 
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa diubah.")
@@ -233,6 +234,7 @@ func hapusAkun() {
 	var idx, i, pos int
 	var n int = dataUser[currentUserIndex].jumlahAkun
 	fmt.Println("\n=== HAPUS AKUN ===")
+	tampilkanAkun()
 
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa dihapus.")
