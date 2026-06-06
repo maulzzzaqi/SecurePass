@@ -378,6 +378,7 @@ func selectionSortNama(a *tabUsers, userIndex int) {
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
+	tampilkanAkun(*a, userIndex)
 }
 
 // Insertion Sort berdasarkan tanggal update
@@ -399,14 +400,15 @@ func insertionSortTanggal(a *tabUsers, userIndex int) {
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
+	tampilkanAkun(*a, userIndex)
 }
 
 func menuSort(a *tabUsers, userIndex int) {
 	var pilih int
 
 	fmt.Println("\n=== MENU SORTING ===")
-	fmt.Println("1. Selection Sort (Nama layanan A-Z)")
-	fmt.Println("2. Insertion Sort (Tanggal update)")
+	fmt.Println("1. Urutkan berdasarkan Nama layanan")
+	fmt.Println("2. Urutkan berdasarkan Tanggal update")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
@@ -501,7 +503,6 @@ func main() {
 
 			for pilihMenuUtama != 0 && currentUserIndex != -1 {
 				menuUtama(arrUser[currentUserIndex].username)
-				fmt.Print("Pilih: ")
 				fmt.Scan(&pilihMenuUtama)
 
 				if pilihMenuUtama == 1 {
