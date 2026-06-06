@@ -230,10 +230,12 @@ func ubahAkun(a *tabUsers, userIndex int) {
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa diubah.")
 	} else {
-		fmt.Print("Masukkan nomor akun yang ingin diubah: ")
+		fmt.Print("Masukkan nomor akun yang ingin diubah (0 untuk kembali): ")
 		fmt.Scan(&idx)
 
-		if idx >= 1 && idx <= n {
+		if idx == 0 {
+			fmt.Println("Kembali ke menu utama...")
+		} else if idx >= 1 && idx <= n {
 			i = idx - 1
 
 			fmt.Println("\nData lama:")
@@ -281,10 +283,12 @@ func hapusAkun(a *tabUsers, userIndex int) {
 	if n == 0 {
 		fmt.Println("Data kosong, tidak ada yang bisa dihapus.")
 	} else {
-		fmt.Print("Masukkan nomor akun yang ingin dihapus: ")
+		fmt.Print("Masukkan nomor akun yang ingin dihapus (0 untuk kembali): ")
 		fmt.Scan(&idx)
 
-		if idx >= 1 && idx <= n {
+		if idx == 0 {
+			fmt.Println("Kembali ke menu utama...")
+		} else if idx >= 1 && idx <= n {
 			pos = idx - 1
 
 			for i = pos; i < n-1; i++ {
@@ -381,6 +385,7 @@ func menuCari(a *tabUsers, userIndex int) {
 	fmt.Println("\n=== MENU PENCARIAN ===")
 	fmt.Println("1. Cari berdasarkan email/username")
 	fmt.Println("2. Cari berdasarkan nama layanan.")
+	fmt.Println("0. Kembali")
 	fmt.Println("========================================")
 
 	fmt.Print("Pilih: ")
@@ -388,7 +393,9 @@ func menuCari(a *tabUsers, userIndex int) {
 
 	resultTotal = 0
 
-	if pilih == 1 {
+	if pilih == 0 {
+		fmt.Println("Membatalkan pencarian. Kembali ke menu utama...")
+	} else if pilih == 1 {
 		layanan = inputString("Masukkan username/email yang dicari: ")
 		sequentialSearch(*a, userIndex, layanan, &results, &resultTotal)
 	} else if pilih == 2 {
@@ -399,21 +406,23 @@ func menuCari(a *tabUsers, userIndex int) {
 		fmt.Println("Pilihan tidak valid!")
 	}
 
-	if resultTotal > 0 {
-		fmt.Println("\nData ditemukan! Jumlah:", resultTotal)
-		for i = 0; i < resultTotal; i++ {
-			pos = results[i] 
-			
+	if pilih == 1 || pilih == 2 {
+		if resultTotal > 0 {
+			fmt.Println("\nData ditemukan! Jumlah:", resultTotal)
+			for i = 0; i < resultTotal; i++ {
+				pos = results[i] 
+				
+				fmt.Println("----------------------------")
+				fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
+				fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
+				fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
+				fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
+				fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
+			}
 			fmt.Println("----------------------------")
-			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
-			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
-			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
-			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
-			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
+		} else if pilih == 1 || pilih == 2 {
+			fmt.Println("\nData tidak ditemukan.") 
 		}
-		fmt.Println("----------------------------")
-	} else if pilih == 1 || pilih == 2 {
-		fmt.Println("\nData tidak ditemukan.") 
 	}
 }
 
@@ -507,6 +516,7 @@ func menuSort(a *tabUsers, userIndex int) {
 	fmt.Println("\n=== MENU SORTING ===")
 	fmt.Println("1. Urutkan berdasarkan Nama layanan")
 	fmt.Println("2. Urutkan berdasarkan Tanggal update")
+	fmt.Println("0. Kembali")
 	fmt.Println("========================================")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
@@ -515,9 +525,12 @@ func menuSort(a *tabUsers, userIndex int) {
 		fmt.Println("1. Urutkan secara ascending (A-Z)")
 		fmt.Println("2. Urutkan secara descending (Z-A)")
 		fmt.Println("========================================")
+		fmt.Println("0. Batal")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihOrder)
-		if pilihOrder == 1 || pilihOrder == 2 {
+		if pilihOrder == 0 {
+			fmt.Println("Dibatalkan...")
+		} else if pilihOrder == 1 || pilihOrder == 2 {
 			selectionSortNama(a, userIndex, pilihOrder)
 			fmt.Println("Data berhasil diurutkan berdasarkan nama layanan.")
 			tampilkanAkun(*a, userIndex)
@@ -527,10 +540,13 @@ func menuSort(a *tabUsers, userIndex int) {
 	} else if pilih == 2 /* Insertion Sort (Tanggal Update) */ {
 		fmt.Println("1. Urutkan secara ascending (Terlama - Terbaru)")
 		fmt.Println("2. Urutkan secara descending (Terbaru - Terlama)")
+		fmt.Println("0. Batal")
 		fmt.Println("========================================")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihOrder)
-		if pilihOrder == 1 || pilihOrder == 2 {
+		if pilihOrder == 0 {
+			fmt.Println("Dibatalkan...")
+		} else if pilihOrder == 1 || pilihOrder == 2 {
 			insertionSortTanggal(a, userIndex, pilihOrder)
 			fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
 			tampilkanAkun(*a, userIndex)
