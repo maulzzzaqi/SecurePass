@@ -515,11 +515,13 @@ func menuSort(a *tabUsers, userIndex int) {
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
-	if pilih == 1 /* Selection Sort (Nama Layanan) */ {
+	if pilih == 0 {
+		fmt.Println("Kembali ke menu utama...")
+	} else if pilih == 1 /* Selection Sort (Nama Layanan) */ {
 		fmt.Println("1. Urutkan secara ascending (A-Z)")
 		fmt.Println("2. Urutkan secara descending (Z-A)")
-		fmt.Println("========================================")
 		fmt.Println("0. Batal")
+		fmt.Println("========================================")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihOrder)
 		if pilihOrder == 0 {
