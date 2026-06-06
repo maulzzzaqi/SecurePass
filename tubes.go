@@ -314,7 +314,7 @@ func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]in
 	}
 }
 
-func menuCari(a tabUsers, userIndex int) {
+func menuCari(a *tabUsers, userIndex int) {
 	var i, pilih int
 	var pos int
 	var layanan string
@@ -331,11 +331,11 @@ func menuCari(a tabUsers, userIndex int) {
 
 	if pilih == 1 {
 		layanan = inputString("Masukkan username/email yang dicari: ")
-		sequentialSearch(a, userIndex, layanan, &results, &resultTotal)
+		sequentialSearch(*a, userIndex, layanan, &results, &resultTotal)
 	} else if pilih == 2 {
 		layanan = inputString("Masukkan nama layanan yang dicari: ")
-		selectionSortNama(&a, userIndex, 1)
-		binarySearch(a, userIndex, layanan, &results, &resultTotal)
+		selectionSortNama(a, userIndex, 1)
+		binarySearch(*a, userIndex, layanan, &results, &resultTotal)
 	} else {
 		fmt.Println("Pilihan tidak valid!")
 	}
@@ -394,7 +394,6 @@ func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
-	tampilkanAkun(*a, userIndex)
 }
 
 // Insertion Sort berdasarkan tanggal update
@@ -432,7 +431,6 @@ func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
 	
 
 	fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
-	tampilkanAkun(*a, userIndex)
 }
 
 func menuSort(a *tabUsers, userIndex int) {
@@ -566,7 +564,7 @@ func main() {
 				} else if pilihMenuUtama == 4 {
 					hapusAkun(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 5 {
-					menuCari(arrUser, currentUserIndex)
+					menuCari(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 6 {
 					menuSort(&arrUser, currentUserIndex)
 				} else if pilihMenuUtama == 7 {
