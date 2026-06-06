@@ -359,7 +359,7 @@ func menuCari(a *tabUsers, userIndex int) {
 	var resultTotal int
 
 	fmt.Println("\n=== MENU PENCARIAN ===")
-	fmt.Println("1. Cari berdasarkan email")
+	fmt.Println("1. Cari berdasarkan email/username")
 	fmt.Println("2. Cari berdasarkan nama layanan.")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
