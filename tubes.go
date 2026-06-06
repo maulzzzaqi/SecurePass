@@ -243,6 +243,7 @@ func ubahAkun(a *tabUsers, userIndex int) {
 			fmt.Println("Update  :", a[userIndex].kumpulanAkun[i].lastUpdate)
 
 			fmt.Println("\n(Ketik '-' jika tidak ingin mengubah data)")
+			fmt.Println("========================================")
 
 			newLayanan = inputString("Layanan baru   : ")
 			newEmail = inputString("Email baru     : ")
@@ -380,6 +381,8 @@ func menuCari(a *tabUsers, userIndex int) {
 	fmt.Println("\n=== MENU PENCARIAN ===")
 	fmt.Println("1. Cari berdasarkan email/username")
 	fmt.Println("2. Cari berdasarkan nama layanan.")
+	fmt.Println("========================================")
+
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
@@ -504,12 +507,14 @@ func menuSort(a *tabUsers, userIndex int) {
 	fmt.Println("\n=== MENU SORTING ===")
 	fmt.Println("1. Urutkan berdasarkan Nama layanan")
 	fmt.Println("2. Urutkan berdasarkan Tanggal update")
+	fmt.Println("========================================")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
 	if pilih == 1 /* Selection Sort (Nama Layanan) */ {
 		fmt.Println("1. Urutkan secara ascending (A-Z)")
 		fmt.Println("2. Urutkan secara descending (Z-A)")
+		fmt.Println("========================================")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihOrder)
 		if pilihOrder == 1 || pilihOrder == 2 {
@@ -522,6 +527,7 @@ func menuSort(a *tabUsers, userIndex int) {
 	} else if pilih == 2 /* Insertion Sort (Tanggal Update) */ {
 		fmt.Println("1. Urutkan secara ascending (Terlama - Terbaru)")
 		fmt.Println("2. Urutkan secara descending (Terbaru - Terlama)")
+		fmt.Println("========================================")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihOrder)
 		if pilihOrder == 1 || pilihOrder == 2 {
@@ -567,6 +573,7 @@ func statistik(a tabUsers, userIndex int) {
 	fmt.Println("Password Lemah :", lemah)
 	fmt.Println("Password Sedang:", sedang)
 	fmt.Println("Password Kuat  :", kuat)
+	fmt.Println("========================================")
 }
 
 func menuUtama(username string) {
@@ -585,6 +592,8 @@ func menuUtama(username string) {
 	fmt.Println("7. Statistik")
 	fmt.Println("8. Logout")
 	fmt.Println("0. Keluar")
+	fmt.Println("========================================")
+
 	fmt.Print("Pilih menu: ")
 }
 
@@ -597,6 +606,8 @@ func menuUser() {
 	fmt.Println("1. Register User Baru")
 	fmt.Println("2. Login")
 	fmt.Println("0. Keluar")
+	fmt.Println("========================================")
+
 	fmt.Print("Pilih: ")
 }
 
