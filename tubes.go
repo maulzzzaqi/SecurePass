@@ -218,8 +218,10 @@ func ubahAkun(a *tabUsers, userIndex int) {
 	/*
 		I.S. terdefinisi array user a dan index user yang sedang login.
 		F.S. data akun pada nomor indeks yang dipilih pengguna diperbarui dengan data layanan, email, password, dan waktu update yang baru.
+				 Data tidak diubah jika input berupa "-"
 	*/
 	var idx, i int
+	var newLayanan, newEmail, newPassword string
 	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== UBAH AKUN ===")
 	tampilkanAkun(*a, userIndex)
@@ -239,9 +241,22 @@ func ubahAkun(a *tabUsers, userIndex int) {
 			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[i].password)
 			fmt.Println("Update  :", a[userIndex].kumpulanAkun[i].lastUpdate)
 
-			a[userIndex].kumpulanAkun[i].layanan = inputString("Layanan baru   : ")
-			a[userIndex].kumpulanAkun[i].email = inputString("Email baru     : ")
-			a[userIndex].kumpulanAkun[i].password = inputString("Password baru  : ")
+			fmt.Println("\n(Ketik '-' jika tidak ingin mengubah data)")
+
+			newLayanan = inputString("Layanan baru   : ")
+			newEmail = inputString("Email baru     : ")
+			newPassword = inputString("Password baru  : ")
+
+			if newLayanan != "-" {
+				a[userIndex].kumpulanAkun[i].layanan = newLayanan
+			}
+			if newEmail != "-" {
+				a[userIndex].kumpulanAkun[i].email = newEmail
+			}
+			if newPassword != "-" {
+				a[userIndex].kumpulanAkun[i].password = newPassword
+			}
+
 			a[userIndex].kumpulanAkun[i].lastUpdate = inputTanggal()
 
 			fmt.Println("Data berhasil diubah!")
