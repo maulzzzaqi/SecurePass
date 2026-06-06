@@ -334,6 +334,7 @@ func menuCari(a tabUsers, userIndex int) {
 		sequentialSearch(a, userIndex, layanan, &results, &resultTotal)
 	} else if pilih == 2 {
 		layanan = inputString("Masukkan nama layanan yang dicari: ")
+		selectionSortNama(&a, userIndex, 1)
 		binarySearch(a, userIndex, layanan, &results, &resultTotal)
 	} else {
 		fmt.Println("Pilihan tidak valid!")
@@ -359,22 +360,37 @@ func menuCari(a tabUsers, userIndex int) {
 
 //SORTING 
 // Selection Sort berdasarkan nama layanan alfabet
-func selectionSortNama(a *tabUsers, userIndex int) {
+func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 	var i, j, min int
 	var n int = a[userIndex].jumlahAkun
 	var temp Akun
 
-	for i = 0; i < n-1; i++ {
-		min = i
-		for j = i + 1; j < n; j++ {
-			if a[userIndex].kumpulanAkun[j].layanan < a[userIndex].kumpulanAkun[min].layanan {
-				min = j
+	if sortOption == 1 /* Ascending*/ {
+		for i = 0; i < n-1; i++ {
+			min = i
+			for j = i + 1; j < n; j++ {
+				if a[userIndex].kumpulanAkun[j].layanan < a[userIndex].kumpulanAkun[min].layanan {
+					min = j
+				}
 			}
-		}
 
-		temp = a[userIndex].kumpulanAkun[i]
-		a[userIndex].kumpulanAkun[i] = a[userIndex].kumpulanAkun[min]
-		a[userIndex].kumpulanAkun[min] = temp
+			temp = a[userIndex].kumpulanAkun[i]
+			a[userIndex].kumpulanAkun[i] = a[userIndex].kumpulanAkun[min]
+			a[userIndex].kumpulanAkun[min] = temp
+		}
+	} else if sortOption == 2 /*Descending*/ {
+		for i = 0; i < n-1; i++ {
+			min = i
+			for j = i + 1; j < n; j++ {
+				if a[userIndex].kumpulanAkun[j].layanan > a[userIndex].kumpulanAkun[min].layanan {
+					min = j
+				}
+			}
+
+			temp = a[userIndex].kumpulanAkun[i]
+			a[userIndex].kumpulanAkun[i] = a[userIndex].kumpulanAkun[min]
+			a[userIndex].kumpulanAkun[min] = temp
+		}
 	}
 
 	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
@@ -382,29 +398,45 @@ func selectionSortNama(a *tabUsers, userIndex int) {
 }
 
 // Insertion Sort berdasarkan tanggal update
-func insertionSortTanggal(a *tabUsers, userIndex int) {
+func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
 	var i, j int
 	var n int = a[userIndex].jumlahAkun
 	var key Akun
 
-	for i = 1; i < n; i++ {
-		key = a[userIndex].kumpulanAkun[i]
-		j = i - 1
+	if sortOption == 1 /*Ascending*/ {
+		for i = 1; i < n; i++ {
+			key = a[userIndex].kumpulanAkun[i]
+			j = i - 1
 
-		for j >= 0 && a[userIndex].kumpulanAkun[j].lastUpdate > key.lastUpdate {
-			a[userIndex].kumpulanAkun[j+1] = a[userIndex].kumpulanAkun[j]
-			j--
+			for j >= 0 && a[userIndex].kumpulanAkun[j].lastUpdate > key.lastUpdate {
+				a[userIndex].kumpulanAkun[j+1] = a[userIndex].kumpulanAkun[j]
+				j--
+			}
+
+			a[userIndex].kumpulanAkun[j+1] = key
 		}
+	} else if sortOption == 2 /*Descending*/ {
+		for i = 1; i < n; i++ {
+			key = a[userIndex].kumpulanAkun[i]
+			j = i - 1
 
-		a[userIndex].kumpulanAkun[j+1] = key
+			for j >= 0 && a[userIndex].kumpulanAkun[j].lastUpdate < key.lastUpdate {
+				a[userIndex].kumpulanAkun[j+1] = a[userIndex].kumpulanAkun[j]
+				j--
+			}
+
+			a[userIndex].kumpulanAkun[j+1] = key
+		}
 	}
+
+	
 
 	fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
 	tampilkanAkun(*a, userIndex)
 }
 
 func menuSort(a *tabUsers, userIndex int) {
-	var pilih int
+	var pilih, pilihOrder int
 
 	fmt.Println("\n=== MENU SORTING ===")
 	fmt.Println("1. Urutkan berdasarkan Nama layanan")
@@ -412,10 +444,30 @@ func menuSort(a *tabUsers, userIndex int) {
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
-	if pilih == 1 {
-		selectionSortNama(a, userIndex)
-	} else if pilih == 2 {
-		insertionSortTanggal(a, userIndex)
+	if pilih == 1 /* Selection Sort (Nama Layanan) */ {
+		fmt.Println("1. Urutkan secara ascending (A-Z)")
+		fmt.Println("2. Urutkan secara descending (Z-A)")
+		fmt.Print("Pilih: ")
+		fmt.Scan(&pilihOrder)
+		if pilihOrder == 1 || pilihOrder == 2 {
+			selectionSortNama(a, userIndex, pilihOrder)
+			fmt.Println("Data berhasil diurutkan berdasarkan nama layanan.")
+			tampilkanAkun(*a, userIndex)
+		} else {
+			fmt.Println("Pilihan arah tidak valid!")
+		}
+	} else if pilih == 2 /* Insertion Sort (Tanggal Update) */ {
+		fmt.Println("1. Urutkan secara ascending (Terlama - Terbaru)")
+		fmt.Println("2. Urutkan secara descending (Terbaru - Terlama)")
+		fmt.Print("Pilih: ")
+		fmt.Scan(&pilihOrder)
+		if pilihOrder == 1 || pilihOrder == 2 {
+			insertionSortTanggal(a, userIndex, pilihOrder)
+			fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
+			tampilkanAkun(*a, userIndex)
+		} else {
+			fmt.Println("Pilihan arah tidak valid!")
+		}
 	} else {
 		fmt.Println("Pilihan tidak valid!")
 	}
