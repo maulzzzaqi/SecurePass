@@ -25,6 +25,7 @@ type Akun struct {
 type tabUsers [userMax]user
 
 func inputString(pesan string) string {
+	/* mengembalikan string input dari pengguna berdasarkan pesan yang dicetak */
 	var x string
 	fmt.Print(pesan)
 	fmt.Scan(&x)
@@ -32,6 +33,7 @@ func inputString(pesan string) string {
 }
 
 func inputTanggal() string {
+	/* mengembalikan string tanggal dan waktu saat ini dengan format YYYY-MM-DD HH:MM:SS */
 	var tgl string
 
 	tgl = time.Now().Format("2006-01-02 15:04:05")
@@ -40,6 +42,7 @@ func inputTanggal() string {
 }
 
 func cekKekuatanPassword(pass string) string {
+	/* mengembalikan string kategori kekuatan password berupa "LEMAH", "SEDANG", atau "KUAT" berdasarkan panjang dan kombinasi karakternya */
 	var i, panjang, skor int
 	var ch byte
 	var adaHurufBesar, adaHurufKecil, adaAngka, adaSimbol bool
@@ -92,6 +95,10 @@ func cekKekuatanPassword(pass string) string {
 }
 
 func tambahUser(a *tabUsers, n *int) {
+	/* 
+		I.S. terdefinisi array user a dan n jumlah total user.
+	  F.S. apabila n < userMax dan username belum digunakan, data user baru ditambahkan dan n bertambah 1. Apabila user penuh atau duplikat, maka akan menampilkan pesan error.
+	*/
 	var i int
 	var newUsername string
 	var isDuplicate bool
@@ -125,6 +132,10 @@ func tambahUser(a *tabUsers, n *int) {
 }
 
 func loginUser(a *tabUsers, n *int, userIndex *int) {
+	/*
+		I.S. terdefinisi array user a, jumlah total user n, dan index user yang sedang login.
+		F.S. index user yang sedang login berisi angka index dari user yang cocok. Apabila n == 0, program memanggil prosedur tambahUser.
+	*/
 	var inputUsername, inputPassword string
 	var i int
 	var isFound bool
@@ -157,6 +168,10 @@ func loginUser(a *tabUsers, n *int, userIndex *int) {
 }
 
 func tambahAkun(a *tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a dan index user yang sedang login.
+		F.S. apabila kapasitas belum penuh, data akun baru ditambahkan ke dalam array kumpulanAkun milik user tersebut dan jumlahAkun bertambah 1
+	*/
 	var jumlahAkun int 
 	
 	jumlahAkun = a[userIndex].jumlahAkun
@@ -177,6 +192,10 @@ func tambahAkun(a *tabUsers, userIndex int) {
 }
 
 func tampilkanAkun(a tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a dan index user yang sedang login.
+		F.S. menampilkan seluruh data dari kumpulanAkun milik user.
+	*/
 	var i int
 	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== DAFTAR AKUN ===")
@@ -196,6 +215,10 @@ func tampilkanAkun(a tabUsers, userIndex int) {
 }
 
 func ubahAkun(a *tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a dan index user yang sedang login.
+		F.S. data akun pada nomor indeks yang dipilih pengguna diperbarui dengan data layanan, email, password, dan waktu update yang baru.
+	*/
 	var idx, i int
 	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== UBAH AKUN ===")
@@ -229,6 +252,10 @@ func ubahAkun(a *tabUsers, userIndex int) {
 }
 
 func hapusAkun(a *tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a dan index user yang sedang login.
+		F.S. data akun pada nomor indeks yang dipilih dihapus, index di belakangnya digeser maju, dan jumlahAkun berkurang 1.
+	*/
 	var idx, i, pos int
 	var n int = a[userIndex].jumlahAkun
 	fmt.Println("\n=== HAPUS AKUN ===")
@@ -255,9 +282,11 @@ func hapusAkun(a *tabUsers, userIndex int) {
 	}
 }
 
-// searching 
-// Sequential Search (email)
 func sequentialSearch(a tabUsers, userIndex int, email string, result *[akunMax]int, resultTotal *int) {
+	/*
+		I.S. terdefinisi array user a, index user, keyword email/username yang dicari, array integer pencarian result, dan jumlah total hasil pencarian resultTotal.
+		F.S. array result berisi indeks dari semua akun dengan email/username yang cocok, dan resultTotal berisi jumlah total data yang ditemukan.
+	*/
 	var i int
 	var n int 
 	
@@ -272,8 +301,12 @@ func sequentialSearch(a tabUsers, userIndex int, email string, result *[akunMax]
 	}
 }
 
-// Binary Search (data harus sudah diurutkan alfabet) (layanan)
 func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]int, resultTotal *int) {
+	/*
+		I.S. terdefinisi array user a, index user, keyword email/username yang dicari, array integer pencarian result, dan jumlah total hasil pencarian resultTotal.
+				 Data kumpulanAkun sudah terurut membesar (ascending) berdasarkan layanan.
+		F.S. array result berisi indeks dari semua akun dengan nama layanan yang cocok, dan resultTotal berisi jumlah total data yang ditemukan.
+	*/
 	var kiri, kanan, tengah, i, batasKiri, batasKanan int
 	var n int 
 	var found bool
@@ -315,6 +348,10 @@ func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]in
 }
 
 func menuCari(a *tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi pointer user a dan index user yang sedang login.
+		F.S. menampilkan menu pencarian, memanggil subprogram pencarian yang sesuai dengan input yang dipilih, dan menampilkan hasil pencarian akun.
+	*/
 	var i, pilih int
 	var pos int
 	var layanan string
@@ -358,9 +395,11 @@ func menuCari(a *tabUsers, userIndex int) {
 	}
 }
 
-//SORTING 
-// Selection Sort berdasarkan nama layanan alfabet
 func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
+	/*
+		I.S. terdefinisi array user a, index user yang sedang login, dan pilihan arah urutan sortOption dalam integer.
+		F.S. data pada kumpulanAkun terurut berdasarkan layanan secara membesar jika sortOption = 1 atau mengecil jika sortOption = 2.
+	*/
 	var i, j, min int
 	var n int = a[userIndex].jumlahAkun
 	var temp Akun
@@ -396,8 +435,11 @@ func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
 }
 
-// Insertion Sort berdasarkan tanggal update
 func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
+	/*
+		I.S. terdefinisi array user a, index user yang sedang login, dan pilihan arah urutan sortOption dalam integer.
+		F.S. data pada kumpulanAkun terurut berdasarkan lastUpdate secara membesar jika sortOption = 1 atau mengecil jika sortOption = 2.
+	*/
 	var i, j int
 	var n int = a[userIndex].jumlahAkun
 	var key Akun
@@ -434,6 +476,10 @@ func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
 }
 
 func menuSort(a *tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a, index user yang sedang login, dan pilihan arah urutan sortOption dalam integer.
+		F.S. menampilkan opsi menu sorting, memanggil subprogram sorting yang sesuai dengan input, lalu menampilkan seluruh akun yang sudah terurut.
+	*/
 	var pilih, pilihOrder int
 
 	fmt.Println("\n=== MENU SORTING ===")
@@ -472,6 +518,10 @@ func menuSort(a *tabUsers, userIndex int) {
 }
 
 func statistik(a tabUsers, userIndex int) {
+	/*
+		I.S. terdefinisi array user a dan index user yang sedang login.
+		F.S. menampilkan statistik total akun tersimpan serta jumlah akun dengan masing-masing kategori password LEMAH, SEDANG, dan KUAT.
+	*/
 	var lemah, kuat, sedang, i int
 	var k string
 	var n int = a[userIndex].jumlahAkun
@@ -501,6 +551,10 @@ func statistik(a tabUsers, userIndex int) {
 }
 
 func menuUtama(username string) {
+	/*
+		I.S. terdefinisi string username dari pengguna yang sedang login.
+		F.S. menampilkan interface opsi menu utama dari program SecurePass.
+	*/
 	fmt.Println("\n===== SECUREPASS MENU =====")
 	fmt.Printf("===== Selamat Datang, %s! ====\n", username)
 	fmt.Println("1. Tambah Akun")
@@ -516,6 +570,10 @@ func menuUtama(username string) {
 }
 
 func menuUser() {
+	/*
+		I.S. 
+		F.S. F.S. menampilkan interface opsi menu registrasi dan login user.
+	*/
 	fmt.Println("\n===== SELAMAT DATANG DI SECUREPASS =====")
 	fmt.Println("1. Register User Baru")
 	fmt.Println("2. Login")
