@@ -34,7 +34,7 @@ func inputString(pesan string) string {
 func inputTanggal() string {
 	var tgl string
 
-	tgl = time.Now().Format("02-01-2006 15:04:05")
+	tgl = time.Now().Format("2006-01-02 15:04:05")
 
 	return tgl
 }
