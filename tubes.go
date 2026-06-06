@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"strings"
 )
 
 const akunMax = 100
@@ -325,19 +326,22 @@ func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]in
 	var kiri, kanan, tengah, i, batasKiri, batasKanan int
 	var n int 
 	var found bool
+	var layananLowercase, layananMidLowercase string
 
 	found = false
 	n = a[userIndex].jumlahAkun
 	kiri = 0
 	kanan = n - 1
 	*resultTotal = 0
+	layananLowercase = strings.ToLower(layanan)
 
 	for kiri <= kanan && !found {
 		tengah = (kiri + kanan) / 2
+		layananMidLowercase = strings.ToLower(a[userIndex].kumpulanAkun[tengah].layanan)
 
-		if a[userIndex].kumpulanAkun[tengah].layanan == layanan {
+		if layananMidLowercase == layananLowercase {
 			found = true
-		} else if a[userIndex].kumpulanAkun[tengah].layanan < layanan {
+		} else if layananMidLowercase < layananLowercase {
 			kiri = tengah + 1
 		} else {
 			kanan = tengah - 1
@@ -346,12 +350,12 @@ func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]in
 
 	if found {
 		batasKiri = tengah
-		for batasKiri > 0 && a[userIndex].kumpulanAkun[batasKiri-1].layanan == layanan {
+		for batasKiri > 0 && strings.ToLower(a[userIndex].kumpulanAkun[batasKiri-1].layanan) == layananLowercase {
 			batasKiri--
 		}
 
 		batasKanan = tengah
-		for batasKanan < n-1 && a[userIndex].kumpulanAkun[batasKanan+1].layanan == layanan {
+		for batasKanan < n-1 && strings.ToLower(a[userIndex].kumpulanAkun[batasKanan+1].layanan) == layananLowercase {
 			batasKanan++
 		}
 
@@ -423,7 +427,7 @@ func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 		for i = 0; i < n-1; i++ {
 			min = i
 			for j = i + 1; j < n; j++ {
-				if a[userIndex].kumpulanAkun[j].layanan < a[userIndex].kumpulanAkun[min].layanan {
+				if strings.ToLower(a[userIndex].kumpulanAkun[j].layanan) < strings.ToLower(a[userIndex].kumpulanAkun[min].layanan) {
 					min = j
 				}
 			}
@@ -436,7 +440,7 @@ func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 		for i = 0; i < n-1; i++ {
 			min = i
 			for j = i + 1; j < n; j++ {
-				if a[userIndex].kumpulanAkun[j].layanan > a[userIndex].kumpulanAkun[min].layanan {
+				if strings.ToLower(a[userIndex].kumpulanAkun[j].layanan) > strings.ToLower(a[userIndex].kumpulanAkun[min].layanan) {
 					min = j
 				}
 			}
