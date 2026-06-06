@@ -256,81 +256,104 @@ func hapusAkun(a *tabUsers, userIndex int) {
 }
 
 // searching 
-// Sequential Search (layanan)
-func sequentialSearch(a tabUsers, userIndex int, layanan string) int {
-	var pos, i int
-	pos = -1
-	var n int = a[userIndex].jumlahAkun
+// Sequential Search (email)
+func sequentialSearch(a tabUsers, userIndex int, email string, result *[akunMax]int, resultTotal *int) {
+	var i int
+	var n int 
+	
+	n = a[userIndex].jumlahAkun
+	*resultTotal = 0
 
 	for i = 0; i < n; i++ {
-		if a[userIndex].kumpulanAkun[i].layanan == layanan {
-			pos = i
+		if a[userIndex].kumpulanAkun[i].email == email {
+			result[*resultTotal] = i
+			*resultTotal++
 		}
 	}
-	return pos
 }
 
-// Binary Search (data harus sudah diurutkan alfabet) (username atau email)
-func binarySearch(a tabUsers, userIndex int, email string) int {
-	var kiri, kanan, pos, tengah int
-	var n int = a[userIndex].jumlahAkun
+// Binary Search (data harus sudah diurutkan alfabet) (layanan)
+func binarySearch(a tabUsers, userIndex int, layanan string, result *[akunMax]int, resultTotal *int) {
+	var kiri, kanan, tengah, i, batasKiri, batasKanan int
+	var n int 
+	var found bool
 
+	found = false
+	n = a[userIndex].jumlahAkun
 	kiri = 0
 	kanan = n - 1
-	pos = -1
+	*resultTotal = 0
 
-	for kiri <= kanan && pos == -1 {
+	for kiri <= kanan && !found {
 		tengah = (kiri + kanan) / 2
 
-		if a[userIndex].kumpulanAkun[tengah].email == email {
-			pos = tengah
-		} else if a[userIndex].kumpulanAkun[tengah].email < email {
+		if a[userIndex].kumpulanAkun[tengah].layanan == layanan {
+			found = true
+		} else if a[userIndex].kumpulanAkun[tengah].layanan < layanan {
 			kiri = tengah + 1
 		} else {
 			kanan = tengah - 1
 		}
 	}
-	return pos
+
+	if found {
+		batasKiri = tengah
+		for batasKiri > 0 && a[userIndex].kumpulanAkun[batasKiri-1].layanan == layanan {
+			batasKiri--
+		}
+
+		batasKanan = tengah
+		for batasKanan < n-1 && a[userIndex].kumpulanAkun[batasKanan+1].layanan == layanan {
+			batasKanan++
+		}
+
+		for i = batasKiri; i <= batasKanan; i++ {
+			result[*resultTotal] = i
+			*resultTotal++
+		}
+	}
 }
 
 func menuCari(a tabUsers, userIndex int) {
-	var pilih, pos int
+	var i, pilih int
+	var pos int
 	var layanan string
+	var results [akunMax]int
+	var resultTotal int
 
 	fmt.Println("\n=== MENU PENCARIAN ===")
-	fmt.Println("1. Cari berdasarkan layanan")
-	fmt.Println("2. Cari berdasarkan email")
+	fmt.Println("1. Cari berdasarkan email")
+	fmt.Println("2. Cari berdasarkan nama layanan.")
 	fmt.Print("Pilih: ")
 	fmt.Scan(&pilih)
 
-	layanan = inputString("Masukkan username/email yang dicari: ")
+	resultTotal = 0
 
 	if pilih == 1 {
-		pos = sequentialSearch(a, userIndex, layanan)
-		if pos != -1 {
-			fmt.Println("Data ditemukan!")
-			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
-			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
-			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
-			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
-			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
-		} else {
-			fmt.Println("Data tidak ditemukan.")
-		}
+		layanan = inputString("Masukkan username/email yang dicari: ")
+		sequentialSearch(a, userIndex, layanan, &results, &resultTotal)
 	} else if pilih == 2 {
-		pos = binarySearch(a, userIndex, layanan)
-		if pos != -1 {
-			fmt.Println("Data ditemukan!")
-			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
-			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
-			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
-			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
-			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
-		} else {
-			fmt.Println("Data tidak ditemukan.")
-		}
+		layanan = inputString("Masukkan nama layanan yang dicari: ")
+		binarySearch(a, userIndex, layanan, &results, &resultTotal)
 	} else {
 		fmt.Println("Pilihan tidak valid!")
+	}
+
+	if resultTotal > 0 {
+		fmt.Println("\nData ditemukan! Jumlah:", resultTotal)
+		for i = 0; i < resultTotal; i++ {
+			pos = results[i] 
+			
+			fmt.Println("----------------------------")
+			fmt.Println("Layanan :", a[userIndex].kumpulanAkun[pos].layanan)
+			fmt.Println("Email   :", a[userIndex].kumpulanAkun[pos].email)
+			fmt.Println("Pass    :", a[userIndex].kumpulanAkun[pos].password)
+			fmt.Println("Update  :", a[userIndex].kumpulanAkun[pos].lastUpdate)
+			fmt.Println("Kekuatan:", cekKekuatanPassword(a[userIndex].kumpulanAkun[pos].password))
+		}
+		fmt.Println("----------------------------")
+	} else if pilih == 1 || pilih == 2 {
+		fmt.Println("\nData tidak ditemukan.") 
 	}
 }
 
