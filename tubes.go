@@ -462,8 +462,6 @@ func selectionSortNama(a *tabUsers, userIndex int, sortOption int) {
 			a[userIndex].kumpulanAkun[min] = temp
 		}
 	}
-
-	fmt.Println("Data berhasil diurutkan berdasarkan nama layanan (A-Z).")
 }
 
 func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
@@ -500,10 +498,6 @@ func insertionSortTanggal(a *tabUsers, userIndex int, sortOption int) {
 			a[userIndex].kumpulanAkun[j+1] = key
 		}
 	}
-
-	
-
-	fmt.Println("Data berhasil diurutkan berdasarkan tanggal update.")
 }
 
 func menuSort(a *tabUsers, userIndex int) {
