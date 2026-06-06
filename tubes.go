@@ -47,6 +47,7 @@ func cekKekuatanPassword(pass string) string {
 	var i, panjang, skor int
 	var ch byte
 	var adaHurufBesar, adaHurufKecil, adaAngka, adaSimbol bool
+	var kategori string
 
 	panjang = len(pass)
 
@@ -88,11 +89,14 @@ func cekKekuatanPassword(pass string) string {
 	}
 
 	if skor <= 2 {
-		return "LEMAH"
+		kategori = "LEMAH"
 	} else if skor <= 4 {
-		return "SEDANG"
+		kategori = "SEDANG"
+	} else {
+		kategori = "KUAT"
 	}
-	return "KUAT"
+	
+	return kategori
 }
 
 func tambahUser(a *tabUsers, n *int) {
